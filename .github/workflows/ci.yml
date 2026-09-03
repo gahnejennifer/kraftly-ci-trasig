@@ -1,0 +1,28 @@
+# Kraftly Mina sidor – CI
+# Skriven av förra tech leaden en sen kväll. "Funkar hos mig."
+name: CI
+
+on: [push, pull-request]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Installera beroenden
+        run: npm install
+
+      - name: Kör testerna
+        run: npm run tests
+
+      - name: Bygg
+        run: npm run build
+
+      - name: Spara bygget
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: build
