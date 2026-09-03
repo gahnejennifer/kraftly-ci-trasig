@@ -19,3 +19,9 @@ on:
 **Orsak:** Workflow-filen körde `npm run tests`, men package.json har bara `test:run` (och `test`) – inte `tests`
 **Fix:** Ändrade `npm run tests` till `npm run test:run` i ci.yml
 **Hade upptäckts tidigare av:** att jämföra scripts-namnen i package.json mot run-kommandona i ci.yml, eller köra kommandot exakt som skrivet lokalt
+
+## Fel 4
+**Symptom:** Inget synligt fel – pipelinen förblev grön efter byte till npm ci
+**Orsak:** npm install döljer tyst avvikelser mellan package.json och package-lock.json genom att uppdatera lock-filen; npm ci kräver att de redan stämmer och failar annars. I det här fallet var de redan i synk, så inget doldes.
+**Fix:** Bytte `npm install` → `npm ci` i ci.yml (best practice oavsett, för reproducerbarhet)
+**Hade upptäckts tidigare av:** att jämföra installationskommandot mot best practice för CI redan vid genomläsning av YAML:en
